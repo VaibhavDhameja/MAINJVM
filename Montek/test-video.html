@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Video Sound Test</title>
+    <style>
+        /* Basic styling for visibility */
+        body { background-color: #111; color: #fff; font-family: sans-serif; text-align: center; }
+        #video-container { 
+            width: 400px; 
+            margin: 50px auto; 
+            border: 2px solid red; 
+            padding: 10px; 
+            cursor: pointer;
+        }
+        #player { 
+            height: 225px; 
+            background: #000; 
+            pointer-events: none; /* Prevents the iframe from stealing hover events */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Video Sound Test</h1>
+    <p>Hover your mouse over the red box below. The video should play WITH SOUND.</p>
+
+    <div id="video-container">
+        <div id="player" data-video-id="KSgdjkKLaVE"></div>
+    </div>
+
+    <script src="assets/js/jquery.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <script>
+        let player;
+
+        // This function creates the YouTube player
+        function onYouTubeIframeAPIReady() {
+            console.log("TEST PAGE: YouTube API is Ready.");
+            player = new YT.Player('player', {
+                height: '100%',
+                width: '100%',
+                videoId: 'KSgdjkKLaVE',
+                playerVars: {
+                    'autoplay': 0,
+                    'mute': 1, // Start muted
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': 'KSgdjkKLaVE'
+                },
+                events: {
+                    'onReady': function() {
+                        console.log("TEST PAGE: Player is Ready.");
+                    }
+                }
+            });
+        }
+
+        // This code runs after the page is loaded
+        $(document).ready(function() {
+            console.log("TEST PAGE: Document is Ready. Setting up hover listener.");
+
+            $('#video-container').on('mouseenter', function() {
+                console.log("TEST PAGE: --- HOVER DETECTED! --- Attempting to unmute and play.");
+                if (player && typeof player.unMute === 'function') {
+                    player.unMute();
+                    player.playVideo();
+                }
+            }).on('mouseleave', function() {
+                console.log("TEST PAGE: --- MOUSE LEFT --- Muting and pausing.");
+                if (player && typeof player.pauseVideo === 'function') {
+                    player.pauseVideo();
+                    player.mute();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
